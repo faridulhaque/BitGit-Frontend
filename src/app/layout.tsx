@@ -5,9 +5,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import WalletConnectionProvider from "@/components/wallet/WalletConnectionProvider";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import { Provider } from "react-redux";
-import store from "./services/store";
 import { IUser } from "@/types/userTypes";
-import { baserUrl } from "./services/constant";
+import store from "@/services/store";
 
 export const GlobalContext = createContext<TContext | null>(null);
 
@@ -33,37 +32,14 @@ export default function RootLayout({
     }
   }, [theme]);
 
-  useEffect(() => {
-    const token = window.localStorage.getItem("token");
-
-    if (token) {
-      const fetchUser = async () => {
-        try {
-          const response = await fetch(`${baserUrl}/user`, {
-            method: "GET",
-            headers: {
-              Authorization: token, // Send token without Bearer prefix
-              "x-api-key": process.env.NEXT_PUBLIC_CLIENT_API_KEY as string,
-              "Content-Type": "application/json",
-            },
-          });
-
-          const data = await response.json();
-          setUser(data?.user);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchUser();
-    }
-  }, []);
+  
 
   const value = {
     default: 0,
     theme,
     setTheme,
     user,
+    setUser,
   };
 
   return (

@@ -1,12 +1,12 @@
 "use client";
+
 import {
   useCreateUserMutation,
   useLoginUserMutation,
-} from "@/app/services/api/authApi";
+} from "@/services/api/authApi";
 import { UserRole } from "@/types/userTypes";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
 
 const ChooseRole = () => {
   const [roleSelection, setRoleSelection] = useState(false);
@@ -22,7 +22,6 @@ const ChooseRole = () => {
     const handleLogin = async () => {
       const response = await login({ github_code: code });
       const data = response?.data;
-      console.log(data)
       if (data?.token) {
         localStorage.setItem("token", data?.token);
         router.push("/");

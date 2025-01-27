@@ -5,16 +5,23 @@ import { GlobalContext } from "@/app/layout";
 import { TContext } from "@/types/contextTypes";
 import Logout from "./Logout";
 import { useWallet } from "@solana/wallet-adapter-react";
+import {
+  useFetchUserQuery,
+  useUpdateUserMutation,
+} from "@/services/api/authApi";
 
 const Navbar = () => {
   const [loaded, setLoaded] = useState(false);
-  const { connected, publicKey } = useWallet();
+  const { connected, publicKey, disconnect } = useWallet();
   const value = useContext(GlobalContext);
   const { theme, setTheme } = value as TContext;
-  const { user } = value as TContext;
+  const { user, setUser } = value as TContext;
+  const { data } = useFetchUserQuery("");
+  const [update] = useUpdateUserMutation();
 
   const onLogout = () => {
     localStorage.removeItem("token");
+    setUser(null);
   };
 
   useEffect(() => {
@@ -24,19 +31,33 @@ const Navbar = () => {
   }, [loaded]);
 
   useEffect(() => {
+    if (data?.user?.id) {
+      setUser(data.user);
+    }
+  }, [data, setUser]);
+
+  useEffect(() => {
+    const updateWalletAddressOnChange = async (current_wa: string) => {
+      try {
+        await update({
+          id: user?.id,
+          body: { wallet_address: current_wa },
+        });
+      } catch (error) {
+        console.log("Error updating wallet address real time onChange", error);
+        disconnect();
+      }
+    };
     if (user) {
       if (connected && publicKey) {
-        const stored_wa = localStorage.getItem("wallet_address");
         const current_wa = publicKey.toBase58();
-        if (stored_wa) {
-          if (current_wa !== stored_wa) {
-          }
-        } else {
-          localStorage.setItem("wallet_address", current_wa);
+
+        if (user?.wallet_address !== current_wa) {
+          updateWalletAddressOnChange(current_wa);
         }
       }
     }
-  }, [connected, publicKey, user]);
+  }, [connected, publicKey, user, update]);
 
   return (
     loaded && (
