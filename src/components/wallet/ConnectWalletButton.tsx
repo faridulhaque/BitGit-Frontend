@@ -5,11 +5,10 @@ import {
   WalletModalProvider,
   WalletMultiButton,
 } from "@solana/wallet-adapter-react-ui";
-import { useWallet } from "@solana/wallet-adapter-react";
-
-const ConnectWalletButton = () => {
-  const { connected } = useWallet();
-
+type ConnectWalletBTN = {
+  connected: boolean;
+};
+const ConnectWalletButton = ({ connected }: ConnectWalletBTN) => {
   return (
     <>
       <div>

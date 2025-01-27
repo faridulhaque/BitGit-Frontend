@@ -3,13 +3,10 @@ import {
   useCreateUserMutation,
   useLoginUserMutation,
 } from "@/app/services/api/authApi";
+import { UserRole } from "@/types/userTypes";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-export enum UserRole {
-  Contributor = "contributor",
-  Creator = "creator",
-}
 
 const ChooseRole = () => {
   const [roleSelection, setRoleSelection] = useState(false);
@@ -25,6 +22,7 @@ const ChooseRole = () => {
     const handleLogin = async () => {
       const response = await login({ github_code: code });
       const data = response?.data;
+      console.log(data)
       if (data?.token) {
         localStorage.setItem("token", data?.token);
         router.push("/");
@@ -100,7 +98,7 @@ const ChooseRole = () => {
               <div className="w-full justify-center flex">
                 <button
                   onClick={handleContinue}
-                  disabled={!role || !creatingUser}
+                  disabled={!role || creatingUser}
                   className="mt-8 bg-info text-white font-semibold py-3 px-8 rounded-lg shadow-md transition-all disabled:opacity-50"
                 >
                   Continue
