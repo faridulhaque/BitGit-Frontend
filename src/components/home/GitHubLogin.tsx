@@ -30,7 +30,7 @@ export default function GitHubLogin() {
         </button>
       ) : user.role === UserRole.Creator ? (
         <button
-          onClick={() => router.push("/create-coin")}
+          onClick={() => router.push("/coin/create")}
           className="bg-green-500 text-white px-6 py-3 rounded-lg"
         >
           Create a Coin
