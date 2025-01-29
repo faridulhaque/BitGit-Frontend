@@ -22,6 +22,7 @@ export default function CreateCoinForm() {
     twitter_url: "",
     custom_merge_score_allowed: false,
     github_repo: "",
+    website_url: "",
   });
 
   const [sendFile, { isLoading }] = useSendFileMutation();
@@ -59,7 +60,8 @@ export default function CreateCoinForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await createCoin(formData);
-    if (response.data.id) router.push("/instructions");
+    if (response.data.id)
+      router.push(`/instructions?repo=${response.data.github_repo}`);
   };
 
   return (
@@ -193,6 +195,22 @@ export default function CreateCoinForm() {
                 name="twitter_url"
                 id="twitter_url"
                 value={formData.twitter_url}
+                onChange={handleInputChange}
+                className="mt-2 block w-full rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="website_url"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Website URL
+              </label>
+              <input
+                type="url"
+                name="website_url"
+                id="website_url"
+                value={formData.website_url}
                 onChange={handleInputChange}
                 className="mt-2 block w-full rounded-md border border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
               />
