@@ -1,3 +1,5 @@
+import { IUser } from "./userTypes";
+
 export interface GitHubRepository {
   name: string;
   full_name: string;
@@ -24,4 +26,17 @@ export interface GitHubWebhook {
     content_type: string;
     insecure_ssl: string;
   };
+}
+
+export interface ICoin {
+  id: string;
+  name: string;
+  ticker: string;
+  description: string;
+  image: string;
+  twitter_url: string;
+  website_url: string;
+  custom_merge_score_allowed: boolean;
+  creator: IUser; 
+  market_cap: string;
 }

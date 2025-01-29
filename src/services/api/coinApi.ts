@@ -9,7 +9,14 @@ const coinApi = apiSlice.injectEndpoints({
         body,
       }),
     }),
+
+    getCoins: builder.query({
+      query: () => ({
+        url: `/coin/many?page=${1}&count=${8}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCreateCoinMutation } = coinApi;
+export const { useCreateCoinMutation, useGetCoinsQuery } = coinApi;
